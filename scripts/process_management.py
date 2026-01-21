@@ -1,15 +1,25 @@
 from scripts import path_management
 import os
+import traceback
 
 
 class ProcessManagement:
-    def __init__(self):
+    def __init__(self, *, debug: bool = False):
         self.choosed_operations = 0
-        self.operations_dict = dict(
-            enumerate(
-                [i for i in os.listdir("/home/emirhan/Desktop/dataset_analysis/scripts/operations")]
-            )
-        )
+        self.debug = debug
+        self.operations_dict = dict(enumerate(self._list_operations()))
+
+    def _list_operations(self):
+        ops_dir = "/home/emirhan/Desktop/dataset_analysis/scripts/operations"
+        entries = []
+        for name in os.listdir(ops_dir):
+            if not name.endswith(".py"):
+                continue
+            if name.startswith("__"):
+                continue
+            entries.append(name)
+        entries.sort()
+        return entries
 
     def show_operations(self):
         for i, e in self.operations_dict.items(): 
@@ -23,11 +33,14 @@ class ProcessManagement:
             if self.choosed_operations not in self.operations_dict.keys():
                 raise IndexError
 
-            # operations
             if self.operations_dict[self.choosed_operations] == "mat_file_reader.py":
                 return self.mat_file()
 
-            return self.open_path()
+            if self.operations_dict[self.choosed_operations] == "hea_file_reader.py":
+                return self.hea_file()
+
+            print("Selected operation is not supported.")
+            return self.show_operations()
 
         except ValueError as e:
             print(f"{e} please choose integer")
@@ -37,10 +50,19 @@ class ProcessManagement:
             print(f"{i} please enter true index")
             return self.choose_operations()
 
+        except Exception as exc:
+            print(f"Unexpected error: {exc}")
+            if self.debug:
+                traceback.print_exc()
+            return self.show_operations()
+
     def mat_file(self):
         path_management.PathManager.start(".mat")
 
+    def hea_file(self):
+        path_management.PathManager.start(".hea")
+
     @classmethod
-    def start(cls):
-        return cls().show_operations()
+    def start(cls, *, debug: bool = False):
+        return cls(debug=debug).show_operations()
 

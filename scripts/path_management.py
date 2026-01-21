@@ -2,6 +2,7 @@ import os
 import platform
 from pathlib import Path
 from scripts.operations import mat_file_reader as mfr
+from scripts.operations import hea_file_reader as hfr
 
 class DirectoryLister:
     def __init__(self):
@@ -42,8 +43,14 @@ class PathManager(DirectoryLister):
 
         if choosed_path.is_file():
             if choosed_path.suffix == self.file_ext:
-                reader = mfr.MatFileReader(str(choosed_path))
-                reader.choosed_file_reader()
+                if self.file_ext == ".mat":
+                    reader = mfr.MatFileReader(str(choosed_path))
+                    reader.choosed_file_reader()
+                elif self.file_ext == ".hea":
+                    reader = hfr.HeaFileReader(str(choosed_path))
+                    reader.choosed_file_reader()
+                else:
+                    print(f"No reader registered for: {self.file_ext}")
             else:
                 print(f"Selected file is not a {self.file_ext} file.")
             return None

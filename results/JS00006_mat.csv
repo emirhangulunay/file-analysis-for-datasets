@@ -1,0 +1,6 @@
+row_type,name,py_type,dtype,shape,ndim,size,preview
+variable,val,ndarray,int16,"(12, 5000)",2,60000,"[[-29 -29 -29 ...   0  -5 -10]
+ [-68 -68 -68 ...   0  10  20]
+ [-39 -39 -39 ...   0  15  29]
+ [ 49  49  49 ...   0   0  -5]
+ [  5   5   5 ...   0 -10 -20]]"
