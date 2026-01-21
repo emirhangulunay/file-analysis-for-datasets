@@ -1,12 +1,10 @@
 from scripts import path_management
 import os
-import traceback
 
 
 class ProcessManagement:
-    def __init__(self, *, debug: bool = False):
+    def __init__(self):
         self.choosed_operations = 0
-        self.debug = debug
         self.operations_dict = dict(enumerate(self._list_operations()))
 
     def _list_operations(self):
@@ -52,8 +50,6 @@ class ProcessManagement:
 
         except Exception as exc:
             print(f"Unexpected error: {exc}")
-            if self.debug:
-                traceback.print_exc()
             return self.show_operations()
 
     def mat_file(self):
@@ -63,6 +59,6 @@ class ProcessManagement:
         path_management.PathManager.start(".hea")
 
     @classmethod
-    def start(cls, *, debug: bool = False):
-        return cls(debug=debug).show_operations()
+    def start(cls):
+        return cls().show_operations()
 
